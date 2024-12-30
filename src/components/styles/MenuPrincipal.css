@@ -1,0 +1,32 @@
+:where(.css-dev-only-do-not-override-1kf000u).ant-menu-light
+  .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1kf000u).ant-menu-light
+  > .ant-menu
+  .ant-menu-item-selected {
+  background: rgb(33, 86, 164);
+  background: linear-gradient(
+    90deg,
+    rgba(33, 86, 164, 1) 5%,
+    rgba(255, 0, 0, 0.9915615904564951) 91%
+  );
+  color: white;
+}
+:where(.css-dev-only-do-not-override-1kf000u).ant-btn-variant-solid {
+  background-color: black;
+}
+:where(.css-dev-only-do-not-override-1kf000u).ant-btn-variant-solid:not(
+    :disabled
+  ):not(.ant-btn-disabled):hover {
+  background-color: rgba(0, 0, 0, 0.621);
+}
+:where(.css-dev-only-do-not-override-1kf000u).ant-btn-variant-solid:hover {
+  background: rgb(33, 86, 164);
+  background: linear-gradient(
+    90deg,
+    rgba(33, 86, 164, 1) 5%,
+    rgba(255, 0, 0, 0.9915615904564951) 91%
+  );
+}
+:where(.css-dev-only-do-not-override-1kf000u).ant-btn {
+  border: 0;
+}

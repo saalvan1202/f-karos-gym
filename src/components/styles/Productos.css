@@ -1,0 +1,20 @@
+.productos-header {
+  height: 10%;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  justify-content: space-between;
+}
+.productos {
+  width: 100%;
+  padding: 20px 90px 0 90px;
+}
+.productos-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.productos-table {
+  width: 100%;
+}
