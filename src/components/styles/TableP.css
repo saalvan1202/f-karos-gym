@@ -31,6 +31,9 @@
   border-radius: 15px;
   border: 1px solid #c9c9c9;
 }
+.tds:hover {
+  background-color: #c9c9c951;
+}
 .td-general {
   display: flex;
   align-items: center;

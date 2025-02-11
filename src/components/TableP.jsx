@@ -1,26 +1,41 @@
 import React, { useEffect, useState } from "react";
 import "./styles/TableP.css";
-import { Avatar, Button } from "antd";
+import { Avatar, Button, Modal } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
+  ExclamationCircleFilled,
   PlusCircleOutlined,
   RestOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { warning } from "./Default/ModalesAction";
-export default function TableP({ productos }) {
-  //ACTIONS
-  function destroy() {
-    setDeletes(true);
-  }
+import axios from "axios";
+import { axiosDelete } from "../../public/helpers";
+export default function TableP({ productos, windowState }) {
+  const { confirm } = Modal;
   //ESTADOS
   const [deletes, setDeletes] = useState(false);
+  //ACTIONS
+  function destroy(id) {
+    console.log(id);
+    const URL = `http://127.0.0.1:8000/inventario/productos/${id}/`;
+    setDeletes(true);
+    axiosDelete(URL, setDeletes);
+    windowState(true);
+  }
+
   //MODALES
-  function onWarning() {
-    warning("Eliminar", "¿Estás seguro de eliminar este registro", destroy);
+  function onWarning(id) {
+    confirm({
+      title: "¿Estás seguro de eliminar este registro",
+      icon: <ExclamationCircleFilled />,
+      onOk() {
+        destroy(id);
+      },
+    });
   }
 
   const [productosT, setProductosT] = useState([]);
@@ -29,7 +44,6 @@ export default function TableP({ productos }) {
       setProductosT(productos);
     }
   }, [productosT]);
-  console.log(productosT);
   return (
     <div className="table-general">
       <div className="tr-general">
@@ -68,7 +82,7 @@ export default function TableP({ productos }) {
               {producto.stock}
             </section>
             <section className="td-general">
-              {producto.inventario ? (
+              {producto.estado ? (
                 <p className="p-true">
                   <CheckCircleOutlined />
                   Activo
@@ -92,7 +106,9 @@ export default function TableP({ productos }) {
               </Button>
               <Button
                 style={{ backgroundColor: "#fecdd5", color: "#d71d4c" }}
-                onClick={onWarning}
+                onClick={() => {
+                  onWarning(producto.id);
+                }}
                 loading={deletes}
               >
                 <DeleteOutlined />

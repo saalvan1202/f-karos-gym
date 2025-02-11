@@ -36,7 +36,7 @@ const MenuPrincipal = () => {
     <div
       style={{
         width: widthMenu,
-        height: "99.5dvh",
+        height: "auto",
         backgroundColor: "#ffff0",
         transition: "width 0.5s ease",
         border: "1px solid #c9c9c9c4",

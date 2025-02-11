@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { Form, Input, Modal } from "antd";
 import "./ModalAntd.css";
-const ModalAntd = ({ isModalOpen, setIsModalOpen }) => {
+import { axiosPost } from "../../../public/helpers";
+const ModalAntd = ({ isModalOpen, setIsModalOpen, setWindowState }) => {
   //Iniciamos la referencia del formulario
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const handleOk = () => {
     form.submit();
-    setIsModalOpen(false);
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const onFinish = (values) => {
-    console.log("Success:", values);
+    console.log(values);
+    const URL = "http://127.0.0.1:8000/inventario/productos/";
+    axiosPost(URL, values, setLoading, setIsModalOpen);
+    setWindowState(true);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -24,6 +28,7 @@ const ModalAntd = ({ isModalOpen, setIsModalOpen }) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        confirmLoading={loading}
         okText="Guardar"
         cancelText="Cancelar"
       >
