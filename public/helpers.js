@@ -9,6 +9,7 @@ export async function axiosGet(url, setState, setData) {
   } catch (error) {
     console.log(error);
     setState(true);
+    console.log(error);
   }
 }
 export async function axiosPost(url, data, setState, setModal) {
