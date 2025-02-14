@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import InventoryTable from "./components/InventoryTable";
 import "./App.css";
-import ExportToExcel from "./utils/ExportToExcel";
 import MenuPrincipal from "./components/MenuPrincipal";
 import Productos from "./pages/Inventario/Productos";
 import Ventas from "./pages/Ventas/Ventas";

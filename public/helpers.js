@@ -1,5 +1,5 @@
 import axios from "axios";
-export const PATH = "https://web-production-85e5.up.railway.app";
+export const PATH = "https://web-production-89a3d.up.railway.app";
 export async function axiosGet(url, setState, setData) {
   try {
     setState(false);
