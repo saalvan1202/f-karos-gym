@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import InventoryTable from "./components/InventoryTable";
 import "./App.css";
 import MenuPrincipal from "./components/MenuPrincipal";
 import Productos from "./pages/Inventario/Productos";
