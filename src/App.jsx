@@ -3,7 +3,9 @@ import InventoryTable from "./components/InventoryTable";
 import "./App.css";
 import ExportToExcel from "./utils/ExportToExcel";
 import MenuPrincipal from "./components/MenuPrincipal";
-import Productos from "./components/Productos";
+import Productos from "./pages/Inventario/Productos";
+import Ventas from "./pages/Ventas/Ventas";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   const [inventory, setInventory] = useState([]); // Inventory data
@@ -31,10 +33,15 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <MenuPrincipal />
-      <Productos />
-    </div>
+    <Router>
+      <div className="App">
+        <MenuPrincipal />
+        <Routes>
+          <Route path="/productos" element={<Productos />}></Route>
+          <Route path="/ventas" element={<Ventas />}></Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

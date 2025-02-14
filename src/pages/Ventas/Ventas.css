@@ -1,0 +1,10 @@
+.ventas {
+  padding: 30px;
+  width: 100%;
+}
+.ventas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}

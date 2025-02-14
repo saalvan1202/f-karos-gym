@@ -1,20 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Modal } from "antd";
 import "./ModalAntd.css";
-import { axiosPost } from "../../../public/helpers";
-const ModalAntd = ({ isModalOpen, setIsModalOpen, setWindowState }) => {
+import { axiosPost, PATH } from "../../../public/helpers";
+const ModalAntd = ({
+  isModalOpen,
+  setIsModalOpen,
+  setWindowState,
+  producto,
+}) => {
   //Iniciamos la referencia del formulario
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const handleOk = () => {
     form.submit();
   };
+  //ESTADOS
+  const [initialValues, setInitialValues] = useState({
+    id: -1,
+    nombre: "",
+    stock: "",
+    precio: "",
+    remember: true,
+  });
+  useEffect(() => {
+    if (isModalOpen && producto) {
+      // Solo actualiza si isModalOpen es true *y* hay un producto
+      form.setFieldsValue(producto); // Usa form.setFieldsValue para actualizar los valores del formulario
+    } else if (isModalOpen) {
+      // Si es una creación, resetea los campos
+      form.setFieldsValue({
+        id: -1,
+        nombre: "",
+        stock: "",
+        precio: "",
+      });
+    }
+  }, [producto, form]);
   const handleCancel = () => {
+    form.resetFields();
     setIsModalOpen(false);
   };
   const onFinish = (values) => {
-    console.log(values);
-    const URL = "http://127.0.0.1:8000/inventario/productos/";
+    values.id = -1;
+    if (producto.id) {
+      values.id = producto.id;
+    }
+    const URL = `${PATH}/inventario/productos/`;
     axiosPost(URL, values, setLoading, setIsModalOpen);
     setWindowState(true);
   };
@@ -35,9 +66,7 @@ const ModalAntd = ({ isModalOpen, setIsModalOpen, setWindowState }) => {
         <Form
           form={form}
           name="basic"
-          initialValues={{
-            remember: true,
-          }}
+          initialValues={initialValues}
           labelCol={{
             span: 8,
           }}

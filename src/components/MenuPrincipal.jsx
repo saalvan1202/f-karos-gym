@@ -10,14 +10,15 @@ import {
   PieChartOutlined,
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
+import { useNavigate } from "react-router-dom";
 const items = [
   {
-    key: "1",
+    key: "productos",
     icon: <DesktopOutlined />,
     label: "Productos",
   },
   {
-    key: "2",
+    key: "ventas",
     icon: <PieChartOutlined />,
     label: "Ventas",
   },
@@ -26,17 +27,22 @@ const items = [
 const MenuPrincipal = () => {
   const [widthMenu, setWidthMenu] = useState(250);
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
     //Esta es la lógica para manejar condicionales de manera resumida
     setWidthMenu(widthMenu == 250 ? 80 : 250);
   };
-
+  function redirect(e) {
+    console.log(e);
+    navigate(`${e.key}`);
+  }
   return (
     <div
       style={{
         width: widthMenu,
         height: "auto",
+        minHeight: "100vh",
         backgroundColor: "#ffff0",
         transition: "width 0.5s ease",
         border: "1px solid #c9c9c9c4",
@@ -54,6 +60,7 @@ const MenuPrincipal = () => {
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </Button>
       <Menu
+        onClick={redirect}
         defaultSelectedKeys={["1"]}
         defaultOpenKeys={["sub1"]}
         mode="inline"

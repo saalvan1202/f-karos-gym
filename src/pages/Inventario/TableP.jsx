@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./styles/TableP.css";
+import "./TableP.css";
 import { Avatar, Button, Modal } from "antd";
 import {
   CheckCircleOutlined,
@@ -11,20 +11,29 @@ import {
   RestOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { warning } from "./Default/ModalesAction";
+import { warning } from "../../components/Default/ModalesAction";
 import axios from "axios";
-import { axiosDelete } from "../../public/helpers";
-export default function TableP({ productos, windowState }) {
+import { axiosDelete, axiosEdit, PATH } from "../../../public/helpers";
+export default function TableP({
+  productos,
+  windowState,
+  setIsModalOpen,
+  setProducto,
+}) {
   const { confirm } = Modal;
   //ESTADOS
   const [deletes, setDeletes] = useState(false);
+  const [edites, setEdites] = useState(false);
   //ACTIONS
   function destroy(id) {
-    console.log(id);
-    const URL = `http://127.0.0.1:8000/inventario/productos/${id}/`;
+    const URL = `${PATH}/inventario/productos/${id}/`;
     setDeletes(true);
     axiosDelete(URL, setDeletes);
     windowState(true);
+  }
+  function edit(id) {
+    const URL = `${PATH}/inventario/productos/${id}/`;
+    axiosEdit(URL, setProducto, setEdites, setIsModalOpen);
   }
 
   //MODALES
@@ -100,7 +109,10 @@ export default function TableP({ productos, windowState }) {
                   backgroundColor: "#f1d796",
                   color: "#c3671c",
                 }}
-                loading={true}
+                onClick={() => {
+                  edit(producto.id);
+                }}
+                loading={edites}
               >
                 <EditOutlined />
               </Button>

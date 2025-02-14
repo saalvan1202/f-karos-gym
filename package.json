@@ -16,6 +16,7 @@
     "karos-gym": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
