@@ -41,6 +41,7 @@ export default function TableV({
   const [state, setState] = useState(false);
   const [stateW, setStateW] = useState(false);
   const [promise, setPromise] = useState(false);
+  const [stateTipoDocumento, setStateTipoDocumento] = useState("-");
   //FORMULARIO
   const [form] = Form.useForm();
   const handleOk = () => {
@@ -213,32 +214,65 @@ export default function TableV({
         handleCancel={handleCancel}
       >
         <div>
-          <div>
-            <Select
-              showSearch
-              style={{
-                width: 400,
-              }}
-              placeholder="Buscar Producto"
-              optionFilterProp="children"
-              filterSort={(optionA, optionB) =>
-                (optionA?.children ?? "")
-                  .toLowerCase()
-                  .localeCompare((optionB?.children ?? "").toLowerCase())
-              }
-              onChange={(value) => {
-                const item = productos.find((item) => item.id == value);
-                if (item) {
-                  addProductosDetalle(item);
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "column",
+              gap: "15px",
+            }}
+          >
+            <div>
+              <Select
+                showSearch
+                style={{
+                  width: 400,
+                }}
+                placeholder="Buscar Producto"
+                optionFilterProp="children"
+                filterSort={(optionA, optionB) =>
+                  (optionA?.children ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.children ?? "").toLowerCase())
                 }
-              }}
-            >
-              {productos.map((item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.nombre}
+                onChange={(value) => {
+                  const item = productos.find((item) => item.id == value);
+                  if (item) {
+                    addProductosDetalle(item);
+                  }
+                }}
+              >
+                {productos.map((item) => (
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.nombre}
+                  </Select.Option>
+                ))}
+              </Select>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <Select
+                defaultValue={stateTipoDocumento}
+                onChange={(e) => {
+                  setStateTipoDocumento(e);
+                }}
+                style={{
+                  width: 400,
+                }}
+                placeholder="Tipo de Documento"
+              >
+                <Select.Option value="-">SIN DOCUMENTO</Select.Option>
+                <Select.Option value="1">
+                  DOCUMENTO NACIAONAL DE IDENTIDAD
                 </Select.Option>
-              ))}
-            </Select>
+              </Select>
+              <Input
+                placeholder="DNI"
+                style={{
+                  display: stateTipoDocumento == "-" ? "none" : "block",
+                  width: 400,
+                }}
+              />
+            </div>
           </div>
           <div>
             <table className="table-detalle-ventas">
