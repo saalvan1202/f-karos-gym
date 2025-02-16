@@ -34,7 +34,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <MenuPrincipal />
         <Routes>
           <Route path="/" element={<Inicio />}></Route>
           <Route path="/productos" element={<Productos />}></Route>

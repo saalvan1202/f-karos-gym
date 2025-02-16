@@ -167,7 +167,7 @@ export default function TableV({
       </div>
       <div
         className="tr-general-d"
-        style={{ maxHeight: "75vh", overflow: "auto" }}
+        style={{ maxHeight: "65vh", overflow: "auto" }}
       >
         {ventas.map((item, index) => (
           <div className="tds" key={item.id}>

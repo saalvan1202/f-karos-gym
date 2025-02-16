@@ -8,6 +8,7 @@ import { warning } from "../../components/Default/ModalesAction";
 import { axiosGet, PATH } from "../../../public/helpers";
 import TableP from "./TableP";
 import { Spin } from "antd";
+import MenuPrincipal from "../../components/MenuPrincipal";
 export default function Productos() {
   //ESTADOS
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,30 +59,32 @@ export default function Productos() {
     );
   }
   return (
-    <div className="productos">
-      <div className="productos-header">
-        <h1>Productos</h1>
-        <ButtonAntd type="primary" title="Agregar" fn={openModal}>
-          <PlusOutlined />
-          Agregar Producto
-        </ButtonAntd>
-      </div>
-      <div className="productos-body">
-        <div className="productos-table">
-          <TableP
-            productos={productos}
-            windowState={setWindowState}
-            setIsModalOpen={setIsModalOpen}
-            setProducto={setProducto}
-          />
+    <MenuPrincipal>
+      <div className="productos">
+        <div className="productos-header">
+          <h1>Productos</h1>
+          <ButtonAntd type="primary" title="Agregar" fn={openModal}>
+            <PlusOutlined />
+            Agregar Producto
+          </ButtonAntd>
         </div>
+        <div className="productos-body">
+          <div className="productos-table">
+            <TableP
+              productos={productos}
+              windowState={setWindowState}
+              setIsModalOpen={setIsModalOpen}
+              setProducto={setProducto}
+            />
+          </div>
+        </div>
+        <ModalAntd
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          setWindowState={setWindowState}
+          producto={producto}
+        />
       </div>
-      <ModalAntd
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        setWindowState={setWindowState}
-        producto={producto}
-      />
-    </div>
+    </MenuPrincipal>
   );
 }

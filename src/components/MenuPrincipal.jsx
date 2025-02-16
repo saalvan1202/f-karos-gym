@@ -24,7 +24,7 @@ const items = [
   },
 ];
 
-const MenuPrincipal = () => {
+const MenuPrincipal = ({ children }) => {
   const [widthMenu, setWidthMenu] = useState(250);
   const [collapsed, setCollapsed] = useState(false);
   const [dKey, setDkey] = useState(localStorage.getItem("key"));
@@ -37,7 +37,7 @@ const MenuPrincipal = () => {
   function redirect(e) {
     localStorage.setItem("key", e.key);
     console.log(e);
-    navigate(`${e.key}`);
+    navigate(`/${e.key}`);
   }
   useEffect(() => {
     const localKey = localStorage.getItem("key");
@@ -47,7 +47,7 @@ const MenuPrincipal = () => {
   return (
     <div
       style={{
-        width: widthMenu,
+        width: "auto",
         height: "auto",
         minHeight: "100vh",
         backgroundColor: "#ffff0",
@@ -57,7 +57,7 @@ const MenuPrincipal = () => {
         boxShadow: "0px 4px 6px #c9c9c9",
       }}
     >
-      <Button
+      {/* <Button
         type="primary"
         onClick={toggleCollapsed}
         style={{
@@ -65,16 +65,19 @@ const MenuPrincipal = () => {
         }}
       >
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
-      <Menu
-        onClick={redirect}
-        defaultSelectedKeys={[dKey]}
-        defaultOpenKeys={["sub1"]}
-        mode="inline"
-        theme="light"
-        inlineCollapsed={collapsed}
-        items={items}
-      />
+      </Button> */}
+      <div>
+        <Menu
+          onClick={redirect}
+          defaultSelectedKeys={[dKey]}
+          defaultOpenKeys={["sub1"]}
+          mode="horizontal"
+          theme="light"
+          inlineCollapsed={collapsed}
+          items={items}
+        />
+      </div>
+      {children}
     </div>
   );
 };

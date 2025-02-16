@@ -65,21 +65,12 @@ export default function TableP({
       </div>
       <div
         className="tr-general-d"
-        style={{ maxHeight: "75vh", overflow: "auto" }}
+        style={{ maxHeight: "65vh", overflow: "auto" }}
       >
         {productos.map((producto, index) => (
           <div className="tds" key={producto.id}>
             <section className="td-general">{productos.length - index}</section>
-            <section className="td-general">
-              <Avatar
-                style={{
-                  marginRight: "10px",
-                  backgroundColor: "#87d068",
-                }}
-                icon={<RestOutlined />}
-              />
-              {producto.nombre}
-            </section>
+            <section className="td-general">{producto.nombre}</section>
 
             <section className="td-general">S/ {producto.precio}</section>
             <section className="td-general" style={{ textAlign: "center" }}>
