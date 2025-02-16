@@ -4,6 +4,7 @@ import MenuPrincipal from "./components/MenuPrincipal";
 import Productos from "./pages/Inventario/Productos";
 import Ventas from "./pages/Ventas/Ventas";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Inicio from "./pages/Inicio/Inicio";
 
 function App() {
   const [inventory, setInventory] = useState([]); // Inventory data
@@ -35,6 +36,7 @@ function App() {
       <div className="App">
         <MenuPrincipal />
         <Routes>
+          <Route path="/" element={<Inicio />}></Route>
           <Route path="/productos" element={<Productos />}></Route>
           <Route path="/ventas" element={<Ventas />}></Route>
         </Routes>

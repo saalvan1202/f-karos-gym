@@ -56,15 +56,20 @@ export default function TableP({
   return (
     <div className="table-general">
       <div className="tr-general">
+        <section className="th-general">#</section>
         <section className="th-general-i">Nombre</section>
         <section className="th-general">Precio</section>
         <section className="th-general">Stock</section>
         <section className="th-general-f">Estado</section>
         <section className="th-general-f">Acciones</section>
       </div>
-      <div className="tr-general-d">
-        {productos.map((producto) => (
+      <div
+        className="tr-general-d"
+        style={{ maxHeight: "75vh", overflow: "auto" }}
+      >
+        {productos.map((producto, index) => (
           <div className="tds" key={producto.id}>
+            <section className="td-general">{productos.length - index}</section>
             <section className="td-general">
               <Avatar
                 style={{
@@ -75,9 +80,10 @@ export default function TableP({
               />
               {producto.nombre}
             </section>
+
             <section className="td-general">S/ {producto.precio}</section>
-            <section className="td-general">
-              <Button
+            <section className="td-general" style={{ textAlign: "center" }}>
+              {/* <Button
                 style={{
                   backgroundColor: "#a1f9d3",
                   color: "#00a273",
@@ -87,7 +93,7 @@ export default function TableP({
                 }}
               >
                 <PlusCircleOutlined />
-              </Button>
+              </Button> */}
               {producto.stock}
             </section>
             <section className="td-general">

@@ -6,7 +6,7 @@
 }
 .tr-general {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 0.2fr repeat(5, 1fr);
   background-color: rgba(175, 178, 180, 0.401);
   height: 4.5vh;
   align-items: center;
@@ -23,7 +23,7 @@
 }
 .tds {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 0.2fr repeat(5, 1fr);
   align-items: center;
   justify-content: center;
   padding-left: 10px;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/MenuPrincipal.css";
 import {
   AppstoreOutlined,
@@ -27,6 +27,7 @@ const items = [
 const MenuPrincipal = () => {
   const [widthMenu, setWidthMenu] = useState(250);
   const [collapsed, setCollapsed] = useState(false);
+  const [dKey, setDkey] = useState(localStorage.getItem("key"));
   const navigate = useNavigate();
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -34,9 +35,15 @@ const MenuPrincipal = () => {
     setWidthMenu(widthMenu == 250 ? 80 : 250);
   };
   function redirect(e) {
+    localStorage.setItem("key", e.key);
     console.log(e);
     navigate(`${e.key}`);
   }
+  useEffect(() => {
+    const localKey = localStorage.getItem("key");
+    console.log(localKey);
+    setDkey(localKey);
+  }, [dKey]);
   return (
     <div
       style={{
@@ -61,7 +68,7 @@ const MenuPrincipal = () => {
       </Button>
       <Menu
         onClick={redirect}
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={[dKey]}
         defaultOpenKeys={["sub1"]}
         mode="inline"
         theme="light"

@@ -7,6 +7,7 @@ import ModalAntd from "../../components/Default/ModalAntd";
 import { warning } from "../../components/Default/ModalesAction";
 import { axiosGet, PATH } from "../../../public/helpers";
 import TableP from "./TableP";
+import { Spin } from "antd";
 export default function Productos() {
   //ESTADOS
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,7 +41,21 @@ export default function Productos() {
     getProductos();
   }, [!windowState]);
   if (!estado) {
-    return "Cargando Productos...";
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          gap: "10px",
+          width: "100%",
+        }}
+      >
+        <Spin />
+        <span>Cargando Productos...</span>
+      </div>
+    );
   }
   return (
     <div className="productos">

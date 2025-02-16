@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./TableV.css";
-import { Avatar, Button, Form, Input, Modal, Select } from "antd";
+import { Avatar, Button, Form, Input, Modal, Select, Spin } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -21,6 +21,12 @@ export default function TableV({
   setIsModalOpen,
   isModalOpen,
   setProducto,
+  detalle,
+  setDetalle,
+  total,
+  setTotal,
+  idVenta,
+  setIdVenta,
 }) {
   //CONSTANTES
   const { confirm } = Modal;
@@ -35,9 +41,6 @@ export default function TableV({
   const [state, setState] = useState(false);
   const [stateW, setStateW] = useState(false);
   const [promise, setPromise] = useState(false);
-  const [detalle, setDetalle] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [idVenta, setIdVenta] = useState(-1);
   //FORMULARIO
   const [form] = Form.useForm();
   const handleOk = () => {
@@ -50,17 +53,12 @@ export default function TableV({
     console.log(venta);
     const URL = `${PATH}/ventas/detalle/`;
     axiosPost(URL, venta, setStateW, setIsModalOpen);
-  };
-  const onFinish = (values) => {
-    values.id = -1;
-    const URL = `${PATH}/inventario/productos/`;
-    axiosPost(URL, values, setLoading, setIsModalOpen);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    setDetalle([]);
+    setTotal(0);
+    setIdVenta(-1);
   };
   const handleCancel = () => {
-    form.resetFields();
+    setIdVenta(-1);
     setIsModalOpen(false);
   };
 
@@ -110,7 +108,7 @@ export default function TableV({
   useEffect(() => {
     getProductos();
     getVentas();
-  }, [stateW]);
+  }, [stateW, !deletes]);
   function destroy(id) {
     const URL = `${PATH}/ventas/detalle/${id}/`;
     setDeletes(true);
@@ -140,20 +138,39 @@ export default function TableV({
     });
   }
   if (!state && !promise) {
-    return "Cargando...";
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          gap: "10px",
+          width: "100%",
+        }}
+      >
+        <Spin />
+        <span>Cargando Ventas...</span>
+      </div>
+    );
   }
   return (
     <div className="table-general">
       <div className="tr-general">
+        <section className="th-general">#</section>
         <section className="th-general-i">FECHA</section>
         <section className="th-general">HORA</section>
         <section className="th-general">TOTAL</section>
         <section className="th-general">USUARIO</section>
         <section className="th-general-f">ACCIONES</section>
       </div>
-      <div className="tr-general-d">
-        {ventas.map((item) => (
+      <div
+        className="tr-general-d"
+        style={{ maxHeight: "75vh", overflow: "auto" }}
+      >
+        {ventas.map((item, index) => (
           <div className="tds" key={item.id}>
+            <section className="td-general">{ventas.length - index}</section>
             <section className="td-general">{item.fecha_formateada}</section>
             <section className="td-general">{item.hora_formateada}</section>
             <section className="td-general">
