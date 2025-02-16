@@ -219,6 +219,7 @@ export default function TableV({
               display: "flex",
               justifyContent: "space-between",
               flexDirection: "column",
+              alignItems: "center",
               gap: "15px",
             }}
           >
@@ -249,7 +250,10 @@ export default function TableV({
                 ))}
               </Select>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              className="label-tipoDocumento"
+            >
               <Select
                 defaultValue={stateTipoDocumento}
                 onChange={(e) => {

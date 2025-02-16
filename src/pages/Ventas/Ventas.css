@@ -8,3 +8,11 @@
   justify-content: space-between;
   width: 100%;
 }
+@media (max-width: 700px) {
+  .ventas-header {
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+}

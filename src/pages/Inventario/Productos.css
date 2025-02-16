@@ -18,3 +18,10 @@
 .productos-table {
   width: 100%;
 }
+@media (max-width: 700px) {
+  .productos-header {
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

@@ -76,7 +76,7 @@ const ModalAntd = ({
           style={{
             display: "grid",
             gridTemplateRows: "1fr 1fr 1fr",
-            height: 260,
+            height: "auto",
             maxWidth: 600,
             gap: "30px",
           }}

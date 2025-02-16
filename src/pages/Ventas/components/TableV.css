@@ -105,3 +105,8 @@
   gap: 5px;
   font-size: 15px;
 }
+@media (max-width: 600px) {
+  .label-tipoDocumento {
+    flex-direction: column;
+  }
+}

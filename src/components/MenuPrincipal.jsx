@@ -48,7 +48,8 @@ const MenuPrincipal = ({ children }) => {
     <div
       style={{
         width: "auto",
-        minWidth: "100%",
+        minWidth: "100vw",
+        overflowX: "auto",
         height: "auto",
         minHeight: "100vh",
         backgroundColor: "#ffff0",
