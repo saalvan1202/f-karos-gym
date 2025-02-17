@@ -220,14 +220,24 @@ export default function TableV({
               justifyContent: "space-between",
               flexDirection: "column",
               alignItems: "center",
+              width: "100%",
               gap: "15px",
             }}
           >
-            <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                gap: "15px",
+              }}
+            >
               <Select
                 showSearch
                 style={{
-                  width: 400,
+                  width: "50%",
+                  minWidth: "300px",
                 }}
                 placeholder="Buscar Producto"
                 optionFilterProp="children"
@@ -251,7 +261,13 @@ export default function TableV({
               </Select>
             </div>
             <div
-              style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                width: "100%",
+              }}
               className="label-tipoDocumento"
             >
               <Select
@@ -260,7 +276,8 @@ export default function TableV({
                   setStateTipoDocumento(e);
                 }}
                 style={{
-                  width: 400,
+                  width: "50%",
+                  minWidth: "300px",
                 }}
                 placeholder="Tipo de Documento"
               >
