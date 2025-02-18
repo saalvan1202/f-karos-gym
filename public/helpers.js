@@ -1,6 +1,6 @@
 import axios from "axios";
-// export const PATH = "https://web-production-89a3d.up.railway.app";
-export const PATH = "http://127.0.0.1:8000";
+export const PATH = "https://web-production-89a3d.up.railway.app";
+//export const PATH = "http://127.0.0.1:8000";
 export async function axiosGet(url, setState, setData) {
   try {
     setState(false);
