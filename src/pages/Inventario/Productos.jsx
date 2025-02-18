@@ -43,19 +43,34 @@ export default function Productos() {
   }, [!windowState]);
   if (!estado) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          gap: "10px",
-          width: "100%",
-        }}
-      >
-        <Spin />
-        <span>Cargando Productos...</span>
-      </div>
+      <MenuPrincipal>
+        <div className="productos">
+          <div className="productos-header">
+            <h1>Productos</h1>
+            <ButtonAntd type="primary" title="Agregar" fn={openModal}>
+              <PlusOutlined />
+              Agregar Producto
+            </ButtonAntd>
+          </div>
+          <div className="productos-body">
+            <div className="productos-table">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  gap: "10px",
+                  width: "100%",
+                }}
+              >
+                <Spin />
+                <span>Cargando Productos...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </MenuPrincipal>
     );
   }
   return (

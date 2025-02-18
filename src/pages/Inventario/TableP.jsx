@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./TableP.css";
-import { Avatar, Button, Modal } from "antd";
+import { Avatar, Button, Form, Input, Modal } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -13,7 +13,14 @@ import {
 } from "@ant-design/icons";
 import { warning } from "../../components/Default/ModalesAction";
 import axios from "axios";
-import { axiosDelete, axiosEdit, PATH } from "../../../public/helpers";
+import {
+  axiosDelete,
+  axiosEdit,
+  axiosPost,
+  PATH,
+} from "../../../public/helpers";
+import ModalD from "../../components/Default/ModalD";
+import { useForm } from "antd/es/form/Form";
 export default function TableP({
   productos,
   windowState,
@@ -24,7 +31,21 @@ export default function TableP({
   //ESTADOS
   const [deletes, setDeletes] = useState(false);
   const [edites, setEdites] = useState(false);
+  const [loadStock, setLoadStock] = useState(false);
+  const [modalStock, setModalStock] = useState(false);
+  const [idProducto, setIdProducto] = useState(-1);
+  const [form] = Form.useForm();
   //ACTIONS
+  //SUBIR FORM
+  function handleOk() {
+    form.submit();
+  }
+  function storeInventario(value) {
+    value.id_producto = idProducto;
+    const URL = `${PATH}/inventario/inventarios/`;
+    axiosPost(URL, value, setLoadStock, setModalStock);
+    windowState(true);
+  }
   function destroy(id) {
     const URL = `${PATH}/inventario/productos/${id}/`;
     setDeletes(true);
@@ -37,6 +58,9 @@ export default function TableP({
   }
 
   //MODALES
+  function handleCancel() {
+    setModalStock(false);
+  }
   function onWarning(id) {
     confirm({
       title: "¿Estás seguro de eliminar este registro",
@@ -74,7 +98,8 @@ export default function TableP({
 
             <section className="td-general">S/ {producto.precio}</section>
             <section className="td-general" style={{ textAlign: "center" }}>
-              {/* <Button
+              <Button
+                title="Agregar Stock"
                 style={{
                   backgroundColor: "#a1f9d3",
                   color: "#00a273",
@@ -82,9 +107,13 @@ export default function TableP({
                   height: "30px",
                   width: "30px",
                 }}
+                onClick={() => {
+                  setModalStock(true);
+                  setIdProducto(producto.id);
+                }}
               >
                 <PlusCircleOutlined />
-              </Button> */}
+              </Button>
               {producto.stock}
             </section>
             <section className="td-general">
@@ -126,6 +155,33 @@ export default function TableP({
           </div>
         ))}
       </div>
+      <ModalD
+        title="Agregar Stock"
+        isModalOpen={modalStock}
+        setIsModalOpen={setModalStock}
+        handleCancel={handleCancel}
+        handleOk={handleOk}
+        action={loadStock}
+      >
+        <Form
+          style={{ height: "auto", marginTop: "20px" }}
+          form={form}
+          onFinish={storeInventario}
+        >
+          <Form.Item
+            label="Cantidad"
+            name="cantidad"
+            rules={[
+              {
+                required: true,
+                message: "Ingrese la cantidad!",
+              },
+            ]}
+          >
+            <Input style={{ width: "40%" }}></Input>
+          </Form.Item>
+        </Form>
+      </ModalD>
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { Card } from "antd";
 import MenuPrincipal from "../../components/MenuPrincipal";
-
+import TableResumen from "./components/TableResumen";
+import TableStock from "./components/TableStock";
+import "./Inicio.css";
 export default function Inicio() {
   return (
     <MenuPrincipal>
@@ -18,6 +20,13 @@ export default function Inicio() {
         >
           <h2>Bienvenido al sistema de ventas</h2>
         </Card>
+      </div>
+      <div
+        className="tables-inicio"
+        style={{ padding: "20px", paddingTop: "0px" }}
+      >
+        <TableResumen />
+        <TableStock />
       </div>
     </MenuPrincipal>
   );

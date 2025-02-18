@@ -4,14 +4,20 @@ import {
   AppstoreOutlined,
   ContainerOutlined,
   DesktopOutlined,
+  HomeOutlined,
   MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PieChartOutlined,
 } from "@ant-design/icons";
-import { Button, Menu } from "antd";
+import { Button, ConfigProvider, Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 const items = [
+  {
+    key: "",
+    icon: <HomeOutlined />,
+    label: "Inicio",
+  },
   {
     key: "productos",
     icon: <DesktopOutlined />,
@@ -54,8 +60,6 @@ const MenuPrincipal = ({ children }) => {
         minHeight: "100vh",
         backgroundColor: "#ffff0",
         transition: "width 0.5s ease",
-        border: "1px solid #c9c9c9c4",
-        borderRadius: "20px",
         boxShadow: "0px 4px 6px #c9c9c9",
       }}
     >
@@ -69,15 +73,30 @@ const MenuPrincipal = ({ children }) => {
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </Button> */}
       <div>
-        <Menu
-          onClick={redirect}
-          defaultSelectedKeys={[dKey]}
-          defaultOpenKeys={["sub1"]}
-          mode="horizontal"
-          theme="light"
-          inlineCollapsed={collapsed}
-          items={items}
-        />
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#1677ff",
+              colorBorderBg: "white",
+            },
+            components: {
+              List: {
+                colorBgContainer: "white",
+                colorBorderBg: "white",
+              },
+            },
+          }}
+        >
+          <Menu
+            onClick={redirect}
+            defaultSelectedKeys={[dKey]}
+            defaultOpenKeys={["sub1"]}
+            mode="horizontal"
+            theme="dark"
+            inlineCollapsed={collapsed}
+            items={items}
+          />
+        </ConfigProvider>
       </div>
       {children}
     </div>

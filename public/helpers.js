@@ -1,5 +1,6 @@
 import axios from "axios";
-export const PATH = "https://web-production-89a3d.up.railway.app";
+// export const PATH = "https://web-production-89a3d.up.railway.app";
+export const PATH = "http://127.0.0.1:8000";
 export async function axiosGet(url, setState, setData) {
   try {
     setState(false);
@@ -12,7 +13,7 @@ export async function axiosGet(url, setState, setData) {
     console.log(error);
   }
 }
-export async function axiosPost(url, data, setState, setModal) {
+export async function axiosPost(url, data, setState, setModal, setGlobal) {
   setState(true);
   try {
     const response = await axios.post(url, data, {
@@ -40,7 +41,7 @@ export async function axiosEdit(url, setData, setState, setModal) {
     setState(false);
   }
 }
-export async function axiosDelete(url, setState, setModal) {
+export async function axiosDelete(url, setState, setModal, setGlobal) {
   try {
     const response = await axios.delete(url);
     console.log(response.data);

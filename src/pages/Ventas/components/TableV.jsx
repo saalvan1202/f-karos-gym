@@ -313,6 +313,8 @@ export default function TableV({
                     <td>S/{parseFloat(item.precio_unitario)}</td>
                     <td>
                       <input
+                        max={item.stock}
+                        min={item.stock == 0 ? item.stock : 1}
                         type="number"
                         defaultValue={item.cantidad}
                         onChange={(value) => {
