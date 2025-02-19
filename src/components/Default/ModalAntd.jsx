@@ -7,6 +7,8 @@ const ModalAntd = ({
   setIsModalOpen,
   setWindowState,
   producto,
+  idRow,
+  setIdRow,
 }) => {
   //Iniciamos la referencia del formulario
   const [form] = Form.useForm();
@@ -39,6 +41,7 @@ const ModalAntd = ({
   const handleCancel = () => {
     form.resetFields();
     setIsModalOpen(false);
+    setIdRow(-1);
   };
   const onFinish = (values) => {
     values.id = -1;

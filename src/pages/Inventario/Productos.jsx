@@ -22,6 +22,7 @@ export default function Productos() {
   });
   const [estado, setEstado] = useState(false);
   const [windowState, setWindowState] = useState();
+  const [idRow, setIdRow] = useState(-1);
   function openModal() {
     setProducto({
       id: -1,
@@ -86,6 +87,8 @@ export default function Productos() {
         <div className="productos-body">
           <div className="productos-table">
             <TableP
+              idRow={idRow}
+              setIdRow={setIdRow}
               productos={productos}
               windowState={setWindowState}
               setIsModalOpen={setIsModalOpen}
@@ -94,6 +97,8 @@ export default function Productos() {
           </div>
         </div>
         <ModalAntd
+          idRow={idRow}
+          setIdRow={setIdRow}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
           setWindowState={setWindowState}

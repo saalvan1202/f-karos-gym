@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./TableP.css";
-import { Avatar, Button, Form, Input, Modal } from "antd";
+import { Avatar, Button, Form, Input, Modal, notification } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -26,6 +26,8 @@ export default function TableP({
   windowState,
   setIsModalOpen,
   setProducto,
+  idRow,
+  setIdRow,
 }) {
   const { confirm } = Modal;
   //ESTADOS
@@ -34,8 +36,19 @@ export default function TableP({
   const [loadStock, setLoadStock] = useState(false);
   const [modalStock, setModalStock] = useState(false);
   const [idProducto, setIdProducto] = useState(-1);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [form] = Form.useForm();
   //ACTIONS
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, mensaje, descripcion) => {
+    api[type]({
+      message: mensaje,
+      description: descripcion,
+    });
+  };
+  window.addEventListener("resize", () => {
+    setWindowWidth(window.innerWidth);
+  });
   //SUBIR FORM
   function handleOk() {
     form.submit();
@@ -53,22 +66,60 @@ export default function TableP({
     windowState(true);
   }
   function edit(id) {
-    const URL = `${PATH}/inventario/productos/${id}/`;
-    axiosEdit(URL, setProducto, setEdites, setIsModalOpen);
+    if (windowWidth < 700) {
+      if (idRow != -1) {
+        const URL = `${PATH}/inventario/productos/${idRow}/`;
+        axiosEdit(URL, setProducto, setEdites, setIsModalOpen);
+      } else {
+        openNotificationWithIcon(
+          "warning",
+          "Advertencia",
+          "Para editar seleccione una fila"
+        );
+      }
+    } else {
+      const URL = `${PATH}/inventario/productos/${id}/`;
+      axiosEdit(URL, setProducto, setEdites, setIsModalOpen);
+    }
   }
 
   //MODALES
   function handleCancel() {
     setModalStock(false);
+    setIdRow(-1);
   }
   function onWarning(id) {
-    confirm({
-      title: "¿Estás seguro de eliminar este registro",
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        destroy(id);
-      },
-    });
+    if (windowWidth < 700) {
+      if (idRow != -1) {
+        confirm({
+          title: "¿Estás seguro de eliminar este registro",
+          icon: <ExclamationCircleFilled />,
+          onOk() {
+            destroy(idRow);
+          },
+          onCancel() {
+            setIdRow(-1);
+          },
+        });
+      } else {
+        openNotificationWithIcon(
+          "warning",
+          "Advertencia",
+          "Para eliminar seleccione una fila"
+        );
+      }
+    } else {
+      confirm({
+        title: "¿Estás seguro de eliminar este registro",
+        icon: <ExclamationCircleFilled />,
+        onOk() {
+          destroy(id);
+        },
+        onCancel() {
+          setIdRow(-1);
+        },
+      });
+    }
   }
 
   const [productosT, setProductosT] = useState([]);
@@ -79,21 +130,91 @@ export default function TableP({
   }, [productosT]);
   return (
     <div className="table-general">
-      <div className="tr-general">
+      {contextHolder}
+      {windowWidth < 700 ? (
+        <section
+          style={{
+            display: "flex",
+            marginBottom: "20px",
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "#f1d796",
+              color: "#c3671c",
+              marginRight: "20px",
+            }}
+            onClick={() => {
+              edit("");
+            }}
+            loading={edites}
+          >
+            <EditOutlined />
+            <span>Editar</span>
+          </Button>
+          <Button
+            style={{
+              backgroundColor: "#fecdd5",
+              color: "#d71d4c",
+            }}
+            onClick={() => {
+              onWarning("");
+            }}
+            loading={deletes}
+          >
+            <DeleteOutlined />
+            <span>Eliminar</span>
+          </Button>
+        </section>
+      ) : (
+        <></>
+      )}
+      <div
+        className="tr-general"
+        style={{
+          gridTemplateColumns:
+            windowWidth >= 700
+              ? "0.2fr repeat(4, 1fr)"
+              : "0.2fr 1.5fr repeat(2, 1fr)",
+        }}
+      >
         <section className="th-general">#</section>
         <section className="th-general-i">Nombre</section>
         <section className="th-general">Precio</section>
         <section className="th-general">Stock</section>
-        <section className="th-general-f">Acciones</section>
+        {windowWidth >= 700 ? (
+          <section className="th-general-f">Acciones</section>
+        ) : (
+          ""
+        )}
       </div>
       <div
         className="tr-general-d"
         style={{ maxHeight: "65vh", overflow: "auto" }}
       >
         {productos.map((producto, index) => (
-          <div className="tds" key={producto.id}>
+          <div
+            onClick={() => {
+              setIdRow(producto.id);
+            }}
+            className="tds"
+            key={producto.id}
+            style={{
+              gridTemplateColumns:
+                windowWidth >= 700
+                  ? "0.2fr repeat(4, 1fr)"
+                  : "0.2fr 1.5fr repeat(2, 1fr)",
+            }}
+          >
             <section className="td-general">{productos.length - index}</section>
-            <section className="td-general">{producto.nombre}</section>
+            <section
+              className="td-general"
+              style={{ marginBottom: "5px", marginTop: "5px" }}
+            >
+              {producto.nombre}
+            </section>
 
             <section className="td-general">S/ {producto.precio}</section>
             <section className="td-general" style={{ textAlign: "center" }}>
@@ -115,29 +236,33 @@ export default function TableP({
               </Button>
               {producto.stock}
             </section>
-            <section className="td-general">
-              <Button
-                style={{
-                  backgroundColor: "#f1d796",
-                  color: "#c3671c",
-                }}
-                onClick={() => {
-                  edit(producto.id);
-                }}
-                loading={edites}
-              >
-                <EditOutlined />
-              </Button>
-              <Button
-                style={{ backgroundColor: "#fecdd5", color: "#d71d4c" }}
-                onClick={() => {
-                  onWarning(producto.id);
-                }}
-                loading={deletes}
-              >
-                <DeleteOutlined />
-              </Button>
-            </section>
+            {windowWidth >= 700 ? (
+              <section className="td-general">
+                <Button
+                  style={{
+                    backgroundColor: "#f1d796",
+                    color: "#c3671c",
+                  }}
+                  onClick={() => {
+                    edit(producto.id);
+                  }}
+                  loading={edites}
+                >
+                  <EditOutlined />
+                </Button>
+                <Button
+                  style={{ backgroundColor: "#fecdd5", color: "#d71d4c" }}
+                  onClick={() => {
+                    onWarning(producto.id);
+                  }}
+                  loading={deletes}
+                >
+                  <DeleteOutlined />
+                </Button>
+              </section>
+            ) : (
+              ""
+            )}
           </div>
         ))}
       </div>

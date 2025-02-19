@@ -60,6 +60,8 @@ export default function TableV({
   const [buttonDisable, setButtonDisable] = useState(false);
   const [stateTipoDocumento, setStateTipoDocumento] = useState("-");
   const [editando, setEditando] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [idRow, setIdRow] = useState(-1);
   //FORMULARIO
   const [form] = Form.useForm();
   const handleOk = () => {
@@ -86,10 +88,14 @@ export default function TableV({
   };
   const handleCancel = () => {
     setIdVenta(-1);
+    setIdRow(-1);
     setIsModalOpen(false);
   };
 
   //ACTIONS
+  window.addEventListener("resize", () => {
+    setWindowWidth(window.innerWidth);
+  });
   function getProductos() {
     const URL = `${PATH}/inventario/productos/`;
     axiosGet(URL, setPromise, setProductos);
@@ -161,9 +167,23 @@ export default function TableV({
     setState(!state);
   }
   async function edit(id) {
-    const URL = `${PATH}/ventas/detalle/${id}/`;
-    await axiosEdit(URL, setVenta, setEdites, setIsModalOpen);
-    console.log(venta);
+    if (windowWidth < 700) {
+      if (idRow != -1) {
+        const URL = `${PATH}/ventas/detalle/${idRow}/`;
+        await axiosEdit(URL, setVenta, setEdites, setIsModalOpen);
+        console.log(venta);
+      } else {
+        openNotificationWithIcon(
+          "warning",
+          "Advertencia",
+          "Para editar seleccione una fila"
+        );
+      }
+    } else {
+      const URL = `${PATH}/ventas/detalle/${id}/`;
+      await axiosEdit(URL, setVenta, setEdites, setIsModalOpen);
+      console.log(venta);
+    }
   }
   useEffect(() => {
     if (venta) {
@@ -174,13 +194,37 @@ export default function TableV({
   }, [venta]);
   //MODALES
   function onWarning(id) {
-    confirm({
-      title: "¿Estás seguro de eliminar este registro",
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        destroy(id);
-      },
-    });
+    if (windowWidth < 700) {
+      if (idRow != -1) {
+        confirm({
+          title: "¿Estás seguro de eliminar este registro",
+          icon: <ExclamationCircleFilled />,
+          onOk() {
+            destroy(idRow);
+          },
+          onCancel() {
+            setIdRow(-1);
+          },
+        });
+      } else {
+        openNotificationWithIcon(
+          "warning",
+          "Advertencia",
+          "Para eliminar seleccione una fila"
+        );
+      }
+    } else {
+      confirm({
+        title: "¿Estás seguro de eliminar este registro",
+        icon: <ExclamationCircleFilled />,
+        onOk() {
+          destroy(id);
+        },
+        onCancel() {
+          setIdRow(-1);
+        },
+      });
+    }
   }
   if (!state && !promise) {
     return (
@@ -202,49 +246,117 @@ export default function TableV({
   return (
     <div className="table-general">
       {contextHolder}
-      <div className="tr-general">
+      {windowWidth < 700 ? (
+        <section
+          style={{
+            display: "flex",
+            marginBottom: "20px",
+            marginTop: "20px",
+            width: "100%",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "#f1d796",
+              color: "#c3671c",
+              marginRight: "20px",
+            }}
+            onClick={() => {
+              edit("");
+            }}
+            loading={edites}
+          >
+            <EditOutlined />
+            <span>Editar</span>
+          </Button>
+          <Button
+            style={{
+              backgroundColor: "#fecdd5",
+              color: "#d71d4c",
+            }}
+            onClick={() => {
+              onWarning("");
+            }}
+            loading={deletes}
+          >
+            <DeleteOutlined />
+            <span>Eliminar</span>
+          </Button>
+        </section>
+      ) : (
+        <></>
+      )}
+      <div
+        className="tr-general"
+        style={{
+          gridTemplateColumns:
+            windowWidth >= 700
+              ? "0.2fr repeat(4, 1fr)"
+              : "0.2fr 1.5fr repeat(2, 1fr)",
+        }}
+      >
         <section className="th-general">#</section>
         <section className="th-general-i">FECHA</section>
         <section className="th-general">HORA</section>
         <section className="th-general">TOTAL</section>
-        <section className="th-general-f">ACCIONES</section>
+        {windowWidth >= 700 ? (
+          <section className="th-general-f">Acciones</section>
+        ) : (
+          ""
+        )}
       </div>
       <div
         className="tr-general-d"
         style={{ maxHeight: "65vh", overflow: "auto" }}
       >
         {ventas.map((item, index) => (
-          <div className="tds" key={item.id}>
+          <div
+            onClick={() => {
+              setIdRow(item.id);
+            }}
+            className="tds"
+            key={item.id}
+            style={{
+              gridTemplateColumns:
+                windowWidth >= 700
+                  ? "0.2fr repeat(4, 1fr)"
+                  : "0.2fr 1.5fr repeat(2, 1fr)",
+            }}
+          >
             <section className="td-general">{ventas.length - index}</section>
             <section className="td-general">{item.fecha_formateada}</section>
             <section className="td-general">{item.hora_formateada}</section>
             <section className="td-general">
               S/ {parseFloat(item.total)}
             </section>
-            <section className="td-general-b">
-              <Button
-                style={{
-                  backgroundColor: "#f1d796",
-                  color: "#c3671c",
-                }}
-                onClick={() => {
-                  edit(item.id);
-                  setEditando(true);
-                }}
-                loading={edites}
-              >
-                <EditOutlined />
-              </Button>
-              <Button
-                style={{ backgroundColor: "#fecdd5", color: "#d71d4c" }}
-                onClick={() => {
-                  onWarning(item.id);
-                }}
-                loading={deletes}
-              >
-                <DeleteOutlined />
-              </Button>
-            </section>
+            {windowWidth >= 700 ? (
+              <section className="td-general">
+                <Button
+                  style={{
+                    backgroundColor: "#f1d796",
+                    color: "#c3671c",
+                  }}
+                  onClick={() => {
+                    edit(producto.id);
+                  }}
+                  loading={edites}
+                >
+                  <EditOutlined />
+                </Button>
+                <Button
+                  style={{ backgroundColor: "#fecdd5", color: "#d71d4c" }}
+                  onClick={() => {
+                    onWarning(producto.id);
+                  }}
+                  loading={deletes}
+                >
+                  <DeleteOutlined />
+                </Button>
+              </section>
+            ) : (
+              ""
+            )}
           </div>
         ))}
       </div>
