@@ -62,6 +62,7 @@ export default function TableV({
   const [editando, setEditando] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [idRow, setIdRow] = useState(-1);
+  const [idRowas, setIdRowas] = useState(-1);
   //FORMULARIO
   const [form] = Form.useForm();
   const handleOk = () => {
