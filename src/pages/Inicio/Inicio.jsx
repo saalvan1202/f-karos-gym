@@ -13,7 +13,7 @@ export default function Inicio() {
       >
         <Card
           style={{
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+            boxShadow: "0 4px 8px rgba(14, 55, 116, 0.47)",
             display: "grid",
             placeItems: "center",
           }}

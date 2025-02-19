@@ -12,6 +12,7 @@ const ModalD = ({
   children,
   width,
   action,
+  disableOk,
 }) => {
   //Iniciamos la referencia del formulario
 
@@ -52,6 +53,9 @@ const ModalD = ({
         confirmLoading={action}
         okText="Guardar"
         cancelText="Cancelar"
+        okButtonProps={{
+          disabled: disableOk,
+        }}
       >
         {children}
       </Modal>

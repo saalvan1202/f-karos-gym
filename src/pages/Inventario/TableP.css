@@ -1,13 +1,14 @@
 .table-general {
   width: 100%;
-  min-width: 60%;
+  min-width: 20%;
   margin: 10px;
   overflow: auto;
 }
 .tr-general {
   display: grid;
-  grid-template-columns: 0.2fr repeat(5, 1fr);
-  background-color: rgba(175, 178, 180, 0.401);
+  grid-template-columns: 0.2fr 2fr repeat(3, 1fr);
+  background-color: #0e3774;
+  color: white;
   height: 4.5vh;
   align-items: center;
   font-weight: bold;
@@ -20,10 +21,12 @@
 .tr-general-d {
 }
 .th-general {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .tds {
   display: grid;
-  grid-template-columns: 0.2fr repeat(5, 1fr);
+  grid-template-columns: 0.2fr 4fr repeat(3, 1fr);
   align-items: center;
   justify-content: center;
   padding-left: 10px;
@@ -39,6 +42,8 @@
   align-items: center;
   height: 8vh;
   gap: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .td-general-b {
   display: flex;

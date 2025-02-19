@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./TableV.css";
-import { Avatar, Button, Form, Input, Modal, Select, Spin } from "antd";
+import {
+  Avatar,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Spin,
+  notification,
+} from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -28,6 +37,13 @@ export default function TableV({
   idVenta,
   setIdVenta,
 }) {
+  const [api, contextHolder] = notification.useNotification();
+  const openNotificationWithIcon = (type, mensaje, descripcion) => {
+    api[type]({
+      message: mensaje,
+      description: descripcion,
+    });
+  };
   //CONSTANTES
   const { confirm } = Modal;
   const { Search } = Input;
@@ -41,22 +57,32 @@ export default function TableV({
   const [state, setState] = useState(false);
   const [stateW, setStateW] = useState(false);
   const [promise, setPromise] = useState(false);
+  const [buttonDisable, setButtonDisable] = useState(false);
   const [stateTipoDocumento, setStateTipoDocumento] = useState("-");
+  const [editando, setEditando] = useState(false);
   //FORMULARIO
   const [form] = Form.useForm();
   const handleOk = () => {
-    const venta = {
-      id: idVenta,
-      total: total,
-      usuario_responsable: "ADMIN",
-      detalles: detalle,
-    };
-    console.log(venta);
-    const URL = `${PATH}/ventas/detalle/`;
-    axiosPost(URL, venta, setStateW, setIsModalOpen);
-    setDetalle([]);
-    setTotal(0);
-    setIdVenta(-1);
+    if (detalle.length == 0) {
+      openNotificationWithIcon(
+        "error",
+        "Venta sin detalles",
+        "Debe agregar productos para poder registrar una venta"
+      );
+    } else {
+      const venta = {
+        id: idVenta,
+        total: total,
+        usuario_responsable: "ADMIN",
+        detalles: detalle,
+      };
+      console.log(venta);
+      const URL = `${PATH}/ventas/detalle/`;
+      axiosPost(URL, venta, setStateW, setIsModalOpen);
+      setDetalle([]);
+      setTotal(0);
+      setIdVenta(-1);
+    }
   };
   const handleCancel = () => {
     setIdVenta(-1);
@@ -82,12 +108,30 @@ export default function TableV({
   }
   function calcularSubTotalProducto(id, cantidad) {
     const productoDetalle = detalle.find((item) => item.producto == id);
-    if (productoDetalle) {
-      productoDetalle.cantidad = cantidad;
-      productoDetalle.sub_total =
-        productoDetalle.precio_unitario * parseInt(cantidad);
-      setDetalle([...detalle]);
-      calcularTotal([...detalle]);
+    const stock = productoDetalle.stock;
+    console.log(stock);
+    if (editando) {
+      productoDetalle.stock =
+        parseInt(productoDetalle.stock) + parseInt(productoDetalle.cantidad);
+    }
+    if (cantidad > productoDetalle.stock) {
+      productoDetalle.stock = stock;
+      openNotificationWithIcon(
+        "error",
+        "Stock Insuficiente",
+        "La cantidad de productos añadidos excede a la cantidad del stock"
+      );
+      setButtonDisable(true);
+    } else {
+      productoDetalle.stock = stock;
+      setButtonDisable(false);
+      if (productoDetalle) {
+        productoDetalle.cantidad = cantidad;
+        productoDetalle.sub_total =
+          productoDetalle.precio_unitario * parseInt(cantidad);
+        setDetalle([...detalle]);
+        calcularTotal([...detalle]);
+      }
     }
   }
   function deleteDetalle(id) {
@@ -157,12 +201,12 @@ export default function TableV({
   }
   return (
     <div className="table-general">
+      {contextHolder}
       <div className="tr-general">
         <section className="th-general">#</section>
         <section className="th-general-i">FECHA</section>
         <section className="th-general">HORA</section>
         <section className="th-general">TOTAL</section>
-        <section className="th-general">USUARIO</section>
         <section className="th-general-f">ACCIONES</section>
       </div>
       <div
@@ -177,7 +221,6 @@ export default function TableV({
             <section className="td-general">
               S/ {parseFloat(item.total)}
             </section>
-            <section className="td-general">{item.usuario_responsable}</section>
             <section className="td-general-b">
               <Button
                 style={{
@@ -186,6 +229,7 @@ export default function TableV({
                 }}
                 onClick={() => {
                   edit(item.id);
+                  setEditando(true);
                 }}
                 loading={edites}
               >
@@ -212,6 +256,7 @@ export default function TableV({
         width="1000px"
         action={action}
         handleCancel={handleCancel}
+        disableOk={buttonDisable}
       >
         <div>
           <div
@@ -313,8 +358,7 @@ export default function TableV({
                     <td>S/{parseFloat(item.precio_unitario)}</td>
                     <td>
                       <input
-                        max={item.stock}
-                        min={item.stock == 0 ? item.stock : 1}
+                        min={1}
                         type="number"
                         defaultValue={item.cantidad}
                         onChange={(value) => {

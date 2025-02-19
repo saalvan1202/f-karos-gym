@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./TableP.css";
 import { Avatar, Button, Form, Input, Modal } from "antd";
 import {
@@ -84,7 +84,6 @@ export default function TableP({
         <section className="th-general-i">Nombre</section>
         <section className="th-general">Precio</section>
         <section className="th-general">Stock</section>
-        <section className="th-general-f">Estado</section>
         <section className="th-general-f">Acciones</section>
       </div>
       <div
@@ -117,19 +116,6 @@ export default function TableP({
               {producto.stock}
             </section>
             <section className="td-general">
-              {producto.estado ? (
-                <p className="p-true">
-                  <CheckCircleOutlined />
-                  Activo
-                </p>
-              ) : (
-                <p className="p-false">
-                  <CloseCircleOutlined />
-                  Inactivo
-                </p>
-              )}
-            </section>
-            <section className="td-general-b">
               <Button
                 style={{
                   backgroundColor: "#f1d796",
