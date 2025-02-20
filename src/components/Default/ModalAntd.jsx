@@ -112,7 +112,7 @@ const ModalAntd = ({
               },
             ]}
           >
-            <Input style={{ height: "5vh" }} />
+            <Input style={{ height: "5vh" }} type="number" />
           </Form.Item>
 
           <Form.Item
@@ -126,7 +126,7 @@ const ModalAntd = ({
               },
             ]}
           >
-            <Input style={{ height: "5vh" }} />
+            <Input style={{ height: "5vh" }} type="number" />
           </Form.Item>
         </Form>
       </Modal>

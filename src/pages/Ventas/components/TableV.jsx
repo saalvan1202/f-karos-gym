@@ -3,6 +3,7 @@ import "./TableV.css";
 import {
   Avatar,
   Button,
+  Empty,
   Form,
   Input,
   Modal,
@@ -311,6 +312,11 @@ export default function TableV({
         className="tr-general-d"
         style={{ maxHeight: "65vh", overflow: "auto" }}
       >
+        {ventas.length == 0 ? (
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        ) : (
+          ""
+        )}
         {ventas.map((item, index) => (
           <div
             onClick={() => {
@@ -339,7 +345,7 @@ export default function TableV({
                     color: "#c3671c",
                   }}
                   onClick={() => {
-                    edit(producto.id);
+                    edit(item.id);
                   }}
                   loading={edites}
                 >
@@ -348,7 +354,7 @@ export default function TableV({
                 <Button
                   style={{ backgroundColor: "#fecdd5", color: "#d71d4c" }}
                   onClick={() => {
-                    onWarning(producto.id);
+                    onWarning(item.id);
                   }}
                   loading={deletes}
                 >

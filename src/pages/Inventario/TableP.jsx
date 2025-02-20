@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./TableP.css";
-import { Avatar, Button, Form, Input, Modal, notification } from "antd";
+import { Avatar, Button, Empty, Form, Input, Modal, notification } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -194,6 +194,11 @@ export default function TableP({
         className="tr-general-d"
         style={{ maxHeight: "65vh", overflow: "auto" }}
       >
+        {productos.length == 0 ? (
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        ) : (
+          ""
+        )}
         {productos.map((producto, index) => (
           <div
             onClick={() => {
